@@ -10,6 +10,8 @@ public class Space extends World
 {
     private Counter scoreCounter;
     private int startAsteroids = 3;
+    
+    private Rocket rocket;
 
     /**
      * Create the space and all objects within it.
@@ -21,7 +23,7 @@ public class Space extends World
         background.setColor(Color.BLACK);
         background.fill();
 
-        Rocket rocket = new Rocket();
+        rocket = new Rocket();
         addObject(rocket, getWidth()/2 + 100, getHeight()/2);
 
         addAsteroids(startAsteroids);
@@ -32,6 +34,19 @@ public class Space extends World
 
         Explosion.initializeImages();
         ProtonWave.initializeImages();
+    }
+    
+    public void act()
+    {
+        String warpText = "";
+        if (rocket.getIsWarpCharged())
+        {
+            warpText = "Warp Charged";
+        } else {
+            warpText = "";
+        }
+        
+        showText(warpText, 180, 480);
     }
 
     /**
@@ -76,7 +91,15 @@ public class Space extends World
      */
     public void gameOver()
     {
-        // TODO: show the score board here. Currently missing.
+        int x = getWidth() / 2;
+        int y = getHeight() / 2;
+        int currentScore = scoreCounter.getValue();
+        
+        addObject(new ScoreBoard(currentScore),x ,y);
     }
-
+    
+    public void updateScore(int addToScore)
+    {
+        scoreCounter.add(addToScore);
+    }
 }

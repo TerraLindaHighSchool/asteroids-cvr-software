@@ -10,6 +10,9 @@ public class Bullet extends SmoothMover
 {
     /** The damage this bullet will deal */
     private static final int damage = 16;
+    
+    /** The points gained from destroying an asteroid */
+    private static final int pointsToAdd = 10;
 
     /** A bullet looses one life each act, and will disappear when life = 0 */
     private int life = 30;
@@ -29,7 +32,7 @@ public class Bullet extends SmoothMover
         super(speed);
         setRotation(rotation);
         addToVelocity(new Vector(rotation, 15));
-        Greenfoot.playSound("Honk1.mp3");
+        Greenfoot.playSound("EnergyGun.wav");
     }
 
     /**
@@ -41,7 +44,7 @@ public class Bullet extends SmoothMover
             getWorld().removeObject(this);
         }
         else {
-            //life--;
+            life--;
             move();
             checkAsteroidHit();
         }
@@ -55,8 +58,9 @@ public class Bullet extends SmoothMover
         Asteroid asteroid = (Asteroid) getOneIntersectingObject(Asteroid.class);
         if (asteroid != null)
         {
-            getWorld().removeObject(this);
+            ((Space) getWorld()).updateScore(pointsToAdd);
             asteroid.hit(damage);
+            getWorld().removeObject(this);
         }
     }
 }
